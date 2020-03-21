@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -16,11 +18,14 @@ public class City {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "ID")
-  private int id;
+  private Integer id;
 
+  @NotBlank
+  @Size(max = 30)
   @Column(name = "NAME")
   private String name;
 
+  @Size(max = 255)
   @Column(name = "DESCRIPTION")
   private String description;
 
