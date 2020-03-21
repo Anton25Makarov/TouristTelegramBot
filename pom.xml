@@ -17,6 +17,8 @@
 
   <properties>
     <java.version>1.8</java.version>
+    <!-- Dependency versions -->
+    <lombok.version>1.18.10</lombok.version>
   </properties>
 
   <dependencies>
@@ -44,6 +46,13 @@
           <artifactId>junit-vintage-engine</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.12</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
