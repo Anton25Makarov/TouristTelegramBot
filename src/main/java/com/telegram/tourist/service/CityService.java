@@ -7,6 +7,7 @@ import com.telegram.tourist.repository.CityRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CityService {
@@ -36,12 +37,14 @@ public class CityService {
     return cityRepository.save(city);
   }
 
+  @Transactional
   public City updateCity(City city, int id) {
     City existingCity = getCityById(id);
     validateUniqFieldsExistence(city);
     return cityRepository.save(copyValues(existingCity, city));
   }
 
+  @Transactional
   public void deleteCity(int id) {
     City cityToDelete = getCityById(id);
     cityRepository.delete(cityToDelete);
