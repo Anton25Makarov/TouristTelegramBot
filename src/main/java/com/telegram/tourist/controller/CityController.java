@@ -9,6 +9,7 @@ import com.telegram.tourist.service.CityService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,28 +37,31 @@ public class CityController {
     this.cityDTOConverter = cityDTOConverter;
   }
 
-  @GetMapping
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<CityDTO>> getCities(@RequestParam(required = false) String name) {
     List<City> foundCities = cityService.getCities(name);
     return new ResponseEntity<>(cityDTOConverter.toDTO(foundCities), HttpStatus.OK);
   }
 
-  @GetMapping("/{id}")
+  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CityDTO> getCityById(@PathVariable int id) {
     City foundCity = cityService.getCityById(id);
     return new ResponseEntity<>(cityDTOConverter.toDTO(foundCity), HttpStatus.OK);
   }
 
-  @PostMapping
-  public ResponseEntity<CityDTO> createCity(@Validated({OnCreate.class}) CityDTO cityDTO) {
+  @PostMapping(
+      consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<CityDTO> createCity(
+      @RequestBody @Validated({OnCreate.class}) CityDTO cityDTO) {
     City city = cityDTOConverter.fromDTO(cityDTO);
     City savedCity = cityService.saveCity(city);
     return new ResponseEntity<>(cityDTOConverter.toDTO(savedCity), HttpStatus.CREATED);
   }
 
-  @PutMapping("/{id}")
+  @PutMapping(value = "/{id}",
+      consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CityDTO> updateCity(
-      @RequestParam int id, @Validated({OnUpdate.class}) CityDTO cityDTO) {
+      @RequestParam int id, @RequestBody @Validated({OnUpdate.class}) CityDTO cityDTO) {
     City city = cityDTOConverter.fromDTO(cityDTO);
     City updatedCity = cityService.updateCity(city, id);
     return new ResponseEntity<>(cityDTOConverter.toDTO(updatedCity), HttpStatus.OK);
